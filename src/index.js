@@ -10,6 +10,14 @@ const Square = (props) => {
     );
 };
 
+const GridSquare = props => {
+    return (
+        <button className="gridSquare">
+            {props.value}
+        </button>
+    )
+};
+
 const Board = (props) => {
     const renderSquare = (props,i) => {
         return (
@@ -22,53 +30,62 @@ const Board = (props) => {
     return (
         <div>
             <div className="board-row">
+                <GridSquare value = {0}/>
                 {renderSquare(props,0)}
                 {renderSquare(props,1)}
                 {renderSquare(props,2)}
             </div>
             <div className="board-row">
+                <GridSquare value = {1}/>
                 {renderSquare(props,3)}
                 {renderSquare(props,4)}
                 {renderSquare(props,5)}
             </div>
             <div className="board-row">
+                <GridSquare value = {2}/>
                 {renderSquare(props,6)}
                 {renderSquare(props,7)}
                 {renderSquare(props,8)}
             </div>
+            <GridSquare/>
+            <GridSquare value = {0}/>
+            <GridSquare value = {1}/>
+            <GridSquare value = {2}/>
         </div>
     );
 
-}
+};
 
 const Game = (props) => {
     const [history, setHistory] = useState(
         [{
-            squares: Array(9).fill(null)
+            squares: Array(9).fill(null),
+            location: ""
         }]
     );
     const [stepNumber, setStepNumber] = useState(0);
     const [xIsNext, setXIsNext] = useState(true);
 
-
     const handleClick =(i) => {
         const hist = history.slice(0, stepNumber + 1);
         const current = hist[hist.length - 1];
         const squares = current.squares.slice();
+        const location = [Math.round((i-1)/3),i%3];
+
         if (calculateWinner(squares) || squares[i]) {
-            alert('Game has ended!');
+            alert('Invalid move!');
             return;
         }
         squares[i] = xIsNext ? 'X' : 'O';
 
         setHistory(
             hist.concat([{
-                squares: squares
+                squares: squares,
+                location: location
             }])
         );
         setStepNumber(hist.length);
         setXIsNext(!xIsNext);
-
     };
     const jumpTo = (step) => {
         setStepNumber(step);
@@ -83,7 +100,7 @@ const Game = (props) => {
             'Go to game start';
         return(
             <li key = {move}>
-                <button onClick={() => jumpTo(move)}>{desc}</button>
+                <button onClick={() => jumpTo(move)}>{desc+"\n("+step.location+")"}</button>
             </li>
         )
     });
@@ -137,3 +154,8 @@ function calculateWinner(squares) {
     return null;
 }
 
+// TODO: Bold the currently selected item in the move list.
+// TODO: Rewrite Board to use two loops to make the squares instead of hardcoding them.
+// TODO: Add a toggle button that lets you sort the moves in either ascending or descending order.
+// TODO: When someone wins, highlight the three squares that caused the win.
+// TODO: When no one wins, display a message about the result being a draw.

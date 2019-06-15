@@ -31,13 +31,26 @@ ul {
     padding: 0;
     text-align: center;
     width: 34px;
+    z-index: 10;
 }
 
-.square:focus {
+.gridSquare{
+    background: #fff;
+    border: none;
+    float: left;
+    font-size: 14px;
+    line-height: 34px;
+    height: 34px;
+    margin-right: -1px;
+    padding: 0;
+    text-align: center;
+    width: 34px;
+}
+.square:focus .gridSquare:focus {
     outline: none;
 }
 
-.kbd-navigation .square:focus {
+.kbd-navigation .square:focus  .gridSquare:focus{
     background: #ddd;
 }
 
