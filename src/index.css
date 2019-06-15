@@ -62,3 +62,7 @@ ul {
 .game-info {
     margin-left: 20px;
 }
+
+.currentMove{
+    font-weight: bold;
+}

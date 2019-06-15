@@ -98,9 +98,11 @@ const Game = (props) => {
         const desc = move ?
             'Go to move #' + move :
             'Go to game start';
+
+        const isCurrentMove = (move === stepNumber) ? 'currentMove' : '';
         return(
-            <li key = {move}>
-                <button onClick={() => jumpTo(move)}>{desc+"\n("+step.location+")"}</button>
+            <li className= { isCurrentMove } key = {move}>
+                <button className= { isCurrentMove } onClick={() => jumpTo(move)}>{desc+"\n("+step.location+")"}</button>
             </li>
         )
     });
@@ -154,7 +156,6 @@ function calculateWinner(squares) {
     return null;
 }
 
-// TODO: Bold the currently selected item in the move list.
 // TODO: Rewrite Board to use two loops to make the squares instead of hardcoding them.
 // TODO: Add a toggle button that lets you sort the moves in either ascending or descending order.
 // TODO: When someone wins, highlight the three squares that caused the win.
