@@ -4,7 +4,7 @@ import './index.css';
 
 const Square = (props) => {
     return (
-        <button className="square" onClick={props.onClick}>
+        <button className={"square " +props.highlight} onClick={props.onClick}>
             {props.value}
         </button>
     );
@@ -22,6 +22,7 @@ const Board = (props) => {
     const renderSquare = (props,i) => {
         return (
             <Square
+                highlight = {(props.winning.includes(i))? 'winning-square' : ''}
                 value={props.squares[i]}
                 onClick={() => props.onClick(i)}
             />
@@ -94,7 +95,8 @@ const Game = (props) => {
     };
 
     const current = history[stepNumber];
-    const winner = calculateWinner(current.squares);
+    const [winner,winningSquares] = (calculateWinner(current.squares)===null) ?[null,[]]:calculateWinner(current.squares);
+    console.log(winner);
     const moveList = listIsAscending ? history.slice() : history.slice().reverse();
     const moves = moveList.map((step, move) => {
         move = listIsAscending ? move : (moveList.length - move)-1;
@@ -120,6 +122,7 @@ const Game = (props) => {
         <div className="game">
             <div className="game-board">
                 <Board
+                    winning={winningSquares}
                     squares={current.squares}
                     onClick={(i) => handleClick(i)}
                 />
@@ -159,12 +162,13 @@ function calculateWinner(squares) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            // console.log([a,b,c]);
+            return [squares[a],[a,b,c]];
+            // return squares[a];
         }
     }
     return null;
 }
 
 // TODO: Rewrite Board to use two loops to make the squares instead of hardcoding them.
-// TODO: When someone wins, highlight the three squares that caused the win.
 // TODO: When no one wins, display a message about the result being a draw.
