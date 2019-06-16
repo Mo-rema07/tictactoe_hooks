@@ -65,6 +65,7 @@ const Game = (props) => {
     );
     const [stepNumber, setStepNumber] = useState(0);
     const [xIsNext, setXIsNext] = useState(true);
+    const [listIsAscending, setListIsAscending] = useState(true);
 
     const handleClick =(i) => {
         const hist = history.slice(0, stepNumber + 1);
@@ -94,7 +95,9 @@ const Game = (props) => {
 
     const current = history[stepNumber];
     const winner = calculateWinner(current.squares);
-    const moves = history.map((step, move) => {
+    const moveList = listIsAscending ? history.slice() : history.slice().reverse();
+    const moves = moveList.map((step, move) => {
+        move = listIsAscending ? move : (moveList.length - move)-1;
         const desc = move ?
             'Go to move #' + move :
             'Go to game start';
@@ -122,8 +125,14 @@ const Game = (props) => {
                 />
             </div>
             <div className="game-info">
+                <p>List Order : {listIsAscending? 'Ascending' : 'Descending'} </p>
+                <label className="switch">
+                    <input type="checkbox" onChange={() => setListIsAscending(!listIsAscending)}/>
+                    <span className="slider round"/>
+                </label>
+                <br/>
                 <div>{status}</div>
-                <ol>{moves}</ol>
+                <ol reversed={!listIsAscending} >{moves}</ol>
             </div>
         </div>
     );
@@ -157,6 +166,5 @@ function calculateWinner(squares) {
 }
 
 // TODO: Rewrite Board to use two loops to make the squares instead of hardcoding them.
-// TODO: Add a toggle button that lets you sort the moves in either ascending or descending order.
 // TODO: When someone wins, highlight the three squares that caused the win.
 // TODO: When no one wins, display a message about the result being a draw.
